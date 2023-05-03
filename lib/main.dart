@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'questão.dart';
+import 'resposta.dart';
 
 void main(){
   runApp(const PerguntaApp());
 }
-class PerguntaAppState extends State <PerguntaApp>{
-  var nPergunta = 0;
-  void responder(){
+class _PerguntaAppState extends State <PerguntaApp>{
+  var _nPergunta = 0;
+  void _responder(){
     setState(() {
-      nPergunta ++;  
+      _nPergunta ++;
     });
   }
   @override
@@ -24,24 +26,10 @@ class PerguntaAppState extends State <PerguntaApp>{
         ),
         body: Column(
           children: <Widget>[
-            Text(perguntas[nPergunta]),
-            ElevatedButton(
-              onPressed: responder,
-              child: const Text('Resposta 1'),
-            ),
-            ElevatedButton(
-              onPressed: responder,
-              child:const Text('Resposta 2')
-            ),
-            ElevatedButton(
-              onPressed: responder,
-              child: const Text('Resposta 3')
-             ),
-            ElevatedButton(
-              onPressed: responder,
-              child: const Text('Resposta 4')
-            )
-              
+            Questao(perguntas[_nPergunta]),
+            Resposta('Resposta 1',_responder),
+            Resposta("Resposta 2",_responder),
+            Resposta("Resposta 3",_responder),
           ],
         ),
       )
@@ -50,14 +38,14 @@ class PerguntaAppState extends State <PerguntaApp>{
 }
 class PerguntaApp extends StatefulWidget{
   const PerguntaApp({super.key});
-  
+
   @override
-  PerguntaAppState createState(){
-    return PerguntaAppState();
+  _PerguntaAppState createState(){
+    return _PerguntaAppState();
   }
 
 
 
 
-  
+
 }
