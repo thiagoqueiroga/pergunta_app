@@ -1,70 +1,77 @@
 import 'package:flutter/material.dart';
-import 'resultado.dart';
-import 'questionario.dart';
+import './questionario.dart';
+import './resultado.dart';
 
-void main() {
-  runApp(const PerguntaApp());
-}
+void main() => runApp(const PerguntaApp());
 
 class _PerguntaAppState extends State<PerguntaApp> {
-  var _nPergunta = 0;
+  var _perguntaSelecionada = 0;
   var _pontuacaoTotal = 0;
-  final List<Map<String, Object>> _perguntas = [
+  final _perguntas = const [
     {
-      'texto': 'Qual a seu animal favorito',
+      'texto': 'Qual é a sua cor favorita?',
       'respostas': [
-        {'texto': 'Preto', 'pontuacao': '10'},
-        {'texto': 'Vermelho', 'pontuacao': '10'},
-        {'texto': 'Verde', 'pontuacao': '10'},
-        {'texto': 'Branco', 'pontuacao': '10'},
+        {'texto': 'Preto', 'pontuacao': 10},
+        {'texto': 'Vermelho', 'pontuacao': 5},
+        {'texto': 'Verde', 'pontuacao': 3},
+        {'texto': 'Branco', 'pontuacao': 1},
       ],
     },
     {
-      'texto': 'Qual o seu animal favorito ?',
+      'texto': 'Qual é o seu animal favorito?',
       'respostas': [
-        {'texto': 'Coelho', 'pontuacao': '5'},
-        {'texto': 'Cachorro', 'pontuacao': '5'},
-        {'texto': 'Gato', 'pontuacao': '5'},
-        {'texto': 'Leão', 'pontuacao': '5'},
-      ]
+        {'texto': 'Coelho', 'pontuacao': 10},
+        {'texto': 'Cobra', 'pontuacao': 5},
+        {'texto': 'Elefante', 'pontuacao': 3},
+        {'texto': 'Leão', 'pontuacao': 1},
+      ],
     },
     {
-      'texto': 'Qual seu esporte favorito',
+      'texto': 'Qual é o seu instrutor favorito?',
       'respostas': [
-        {'texto': 'Futebol', 'pontuacao': '15'},
-        {'texto': 'Volei', 'pontuacao': '15'},
-        {'texto': 'Basquete', 'pontuacao': '15'},
-        {'texto': 'Tenis', 'pontuacao': '15'},
-      ]
+        {'texto': 'Leo', 'pontuacao': 10},
+        {'texto': 'Maria', 'pontuacao': 5},
+        {'texto': 'João', 'pontuacao': 3},
+        {'texto': 'Pedro', 'pontuacao': 1},
+      ],
     }
   ];
+
   void _responder(int pontuacao) {
     if (temPerguntaSelecionada) {
       setState(() {
-        _nPergunta++;
+        _perguntaSelecionada++;
         _pontuacaoTotal += pontuacao;
       });
     }
-    // ignore: avoid_print
-    print(_pontuacaoTotal);
+  }
+
+  void _reiniciarQuestionario() {
+    setState(() {
+      _perguntaSelecionada = 0;
+      _pontuacaoTotal = 0;
+    });
   }
 
   bool get temPerguntaSelecionada {
-    return _nPergunta < _perguntas.length;
+    return _perguntaSelecionada < _perguntas.length;
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-          appBar: AppBar(title: const Center(child: Text('Perguntas'))),
-          body: temPerguntaSelecionada
-              ? Questionario(
-                  perguntas: _perguntas,
-                  nPergunta: _nPergunta,
-                  quantoResponder: _responder,
-                )
-              : const Resultado()),
+        appBar: AppBar(
+          title: const Text('Perguntas'),
+        ),
+        body: temPerguntaSelecionada
+            ? Questionario(
+                perguntas: _perguntas,
+                perguntaSelecionada: _perguntaSelecionada,
+                quandoResponder: _responder,
+              )
+            : Resultado(_pontuacaoTotal, _reiniciarQuestionario),
+      ),
     );
   }
 }
@@ -73,7 +80,6 @@ class PerguntaApp extends StatefulWidget {
   const PerguntaApp({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _PerguntaAppState createState() {
     return _PerguntaAppState();
   }
